@@ -4,6 +4,7 @@ db = sqlite3.connect("students.db")
 c = db.cursor()
 
 #Create list with (mark, id) of each mark from courses
+
 command = "SELECT mark, id FROM courses"
 c.execute(command)
 gradeList =  c.fetchall()
@@ -12,7 +13,7 @@ gradeList =  c.fetchall()
 #Create list with (name, id) from people
 command = "SELECT name, id FROM people"
 c.execute(command)
-names = c.fetchall()
+name = c.fetchall()
 #print names
 
 #Get student's averages
@@ -25,9 +26,9 @@ def getAverage(studentid):
 			count += 1
 	return avgsum / count
 
-print getAverage(1)
+#print getAverage(1)
 
-for each in names:
+for each in name:
 	print 'Student: ' + each[0] + ' ID: ' + str(each[1]) + ' Average: ' + "%5.2f"%getAverage(each[1])
 
 
@@ -36,12 +37,10 @@ def createTable():
 		#c.execute("DROP TABLE peeps_avg")
 		command = "CREATE TABLE peeps_avg ( avg INTEGER, id INTEGER);"
 		c.execute(command)
-		for each in names:
+		for each in name:
 			with db:
 				avg = getAverage(each[1])
 				command = 'INSERT INTO peeps_avg VALUES("%5.2f", "%d");'%(avg, each[1])
-				print command
-				#print(command)
 				c.execute(command)
 		db.commit()
 
@@ -52,7 +51,15 @@ def updateAverage(studentid):
 
 createTable()
 updateAverage(5)
-	
+
+def addRows(code, mark, studentid):
+        command = "INSERT INTO courses VALUES('%s', %d, %d);"%(code, mark, studentid)
+        c.execute(command)      
+        
+        db.commit()
+addRows("softdev", 100, 11)
+
+
 def printFetch():
 	command = "SELECT * FROM peeps_avg;"
 	c.execute(command)
