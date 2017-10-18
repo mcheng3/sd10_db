@@ -34,7 +34,7 @@ for each in name:
 
 #Create table
 def createTable():
-		#c.execute("DROP TABLE peeps_avg")
+		c.execute("DROP TABLE peeps_avg")
 		command = "CREATE TABLE peeps_avg ( avg INTEGER, id INTEGER);"
 		c.execute(command)
 		for each in name:
@@ -52,12 +52,25 @@ def updateAverage(studentid):
 createTable()
 updateAverage(5)
 
+def updateGrades():
+        command = "SELECT mark, id FROM courses"
+        c.execute(command)
+        gradeList =  c.fetchall()
+
+def updateNames():
+        command = "SELECT name, id FROM people"
+        c.execute(command)
+        name = c.fetchall()
+        
 def addRows(code, mark, studentid):
         command = "INSERT INTO courses VALUES('%s', %d, %d);"%(code, mark, studentid)
-        c.execute(command)      
-        
+        c.execute(command)
+        updateGrades()
+        updateNames()
+        updateAverage(studentid)
         db.commit()
-addRows("softdev", 100, 11)
+addRows("softdev", 100, 10)
+addRows("ceramics", 95, 10)
 
 
 def printFetch():
