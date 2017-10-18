@@ -23,8 +23,6 @@ def getAverage(studentid):
 		if studentid == each[1]:
 			avgsum += each[0]
 			count += 1
-		elif studentid < each[1]:
-			break
 	return avgsum / count
 
 print getAverage(1)
@@ -47,11 +45,21 @@ def createTable():
 				c.execute(command)
 		db.commit()
 
+def updateAverage(studentid):
+	command = "UPDATE peeps_avg SET avg = %5.2f WHERE id = %d"%(getAverage(studentid), studentid)
+	c.execute(command)
+	db.commit()
+
 createTable()
+updateAverage(5)
 	
-def display():
+def printFetch():
 	command = "SELECT * FROM peeps_avg;"
 	c.execute(command)
 	output = c.fetchall()
 	print output
-display()
+printFetch()
+
+
+
+db.close()
