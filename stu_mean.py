@@ -17,26 +17,41 @@ names = c.fetchall()
 
 #Get student's averages
 def getAverage(studentid):
-	avgsum = 0;
+	avgsum = 0.0;
 	count = 0;
 	for each in gradeList:
 		if studentid == each[1]:
 			avgsum += each[0]
 			count += 1
+		elif studentid < each[1]:
+			break
 	return avgsum / count
 
-#print getAverage(1)
+print getAverage(1)
+
+for each in names:
+	print 'Student: ' + each[0] + ' ID: ' + str(each[1]) + ' Average: ' + "%5.2f"%getAverage(each[1])
+
 
 #Create table
 def createTable():
-        c.execute("drop table peeps_avg")
-        command = "CREATE TABLE peeps_avg (id INTEGER, avg INTEGER);"
-        c.execute(command)
-        for each in names:
-                avg = getAverage(each[1])
-                command = 'INSERT INTO peeps_avg VALUES(' + str(each[1]) + ',' + str(avg) + ');'
-                #print(command)
-                c.execute(command)
-                
+		#c.execute("DROP TABLE peeps_avg")
+		command = "CREATE TABLE peeps_avg ( avg INTEGER, id INTEGER);"
+		c.execute(command)
+		for each in names:
+			with db:
+				avg = getAverage(each[1])
+				command = 'INSERT INTO peeps_avg VALUES("%5.2f", "%d");'%(avg, each[1])
+				print command
+				#print(command)
+				c.execute(command)
+		db.commit()
+
 createTable()
-        
+	
+def display():
+	command = "SELECT * FROM peeps_avg;"
+	c.execute(command)
+	output = c.fetchall()
+	print output
+display()
