@@ -34,7 +34,7 @@ for each in name:
 
 #Create table
 def createTable():
-		c.execute("DROP TABLE peeps_avg")
+		#c.execute("DROP TABLE peeps_avg")
 		command = "CREATE TABLE peeps_avg ( avg INTEGER, id INTEGER);"
 		c.execute(command)
 		for each in name:
